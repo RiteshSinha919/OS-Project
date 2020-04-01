@@ -1,31 +1,17 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<semaphore.h>
 #include<unistd.h>
-#include<sys/types.h>
-int main()
-{
-pid_t p;
-int m,seats,count=0;
-printf("Enter the number of seats in waiting room of barbershop : \n");
-scanf("%d \n",&maxSeat);
-int arr[maxSeat];
-printf("Enter the initial number of customers waiting in the waiting room : \n");
-scanf("%d \n",&initial);
-p=fork();
-	if(p<0)
-	{
+#include<pthread.h>
+#include<time.h>
+#define max_client 20
 
-	}
-	else if(p==0)
-	{
-		if(count==maxSeat)
-		{
-			printf("Seats are full \n");
-			sleep(2);
-		}
-		else if(count<maxSeat)
-		{
-			printf("You can wait in the waiting room until your turn comes");
-		}
-	}
-}
+void *client(void *n);
+void *hair_stylist(void *);
+void wait_time(int sec);
+
+sem_t chair_for_client;
+sem_t chair_for_hair_stylist;
+sem_t chair_for_sleeping;
+sem_t waiting_time_for_client;
+
