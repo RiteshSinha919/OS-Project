@@ -22,9 +22,9 @@ int main(int argc,char *argv[])
 	pthread_t tid[max_client];
 	int i,num_client,num_seat;
 	int buff[max_client];
-	printf("Enter te number of clients : \n");
+	printf("Enter the number of clients : \n");
 	scanf("%d",&num_client);
-	printf("Enter te number of seats : \n");
+	printf("Enter the number of seats : \n");
 	scanf("%d",&num_seat);
 	if(num_client > max_client)
 	{
@@ -56,4 +56,48 @@ int main(int argc,char *argv[])
 	pthread_join(btid,NULL);
 	system("PAUSE");
 	return 0;
+}
+
+
+void wait_time(int sec)
+{
+	int size=1;
+	sleep(size);
+}
+
+void *hair_stylist(void *style)
+{
+	while(!finished)
+	{
+		printf("The Hair Stylist is sleeping \n");
+		sem_wait(&chair_for_sleeping);
+		if(!finished)
+		{
+			printf("The hair stylist is cutting the hair \n");
+			wait_time(4);
+			printf("The hair stylist has finished cutting hair \n");
+			sem_post(&waiting_time_for_client);
+		}
+		else
+		{
+			printf("Time to close the shop \n");
+		}
+	}
+}
+
+void *client(void *change)
+{
+	int n = *(int *)change;
+	printf("Client %d is leaving for hair stylist's shop \n",n+1);
+	wait_time(4);
+	printf("Client %d arrived at hair stylist's shop \n",n+1);
+	sem_wait(&chair_for_client);
+	printf("Client %d entering waiting room \n",n+1);
+	sem_wait(&chair_for_hair_stylist);
+	sem_post(&chair_for_client);
+	printf("Client %d is waking the hair stylist \n",n+1);
+	sem_post(&chair_for_sleeping);
+	sem_wait(&waiting_time_for_client);
+	sem_post(&chair_for_hair_stylist);
+	printf("Client %d is leaving the hair stylist's shop \n",n+1);
 }
