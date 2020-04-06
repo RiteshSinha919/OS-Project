@@ -16,8 +16,7 @@ void main()
         scanf("%d",&burstt[i]);
         process[i]=i+1;          
     }
- 
-//sorting burst time in ascending order using selection sort
+
     for(i=0;i<n;i++)
     {
         pos=i;
@@ -38,7 +37,7 @@ void main()
  
     waitingt[0]=0;                    
  
-//calculate waiting time
+
     for(i=1;i<n;i++)
     {
         waitingt[i]=0;
@@ -52,7 +51,7 @@ void main()
     total=0;
  
     printf("\nProcess\t    Burst Time    \tWaiting Time\tTurnaround Time");
- //calculate turnaround time
+
     for(i=0;i<n;i++)
     {
         turnaroundt[i]=burstt[i]+waitingt[i];    
